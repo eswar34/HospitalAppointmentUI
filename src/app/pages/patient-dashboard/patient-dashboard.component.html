@@ -1,0 +1,113 @@
+<div class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🏥 Hospital</h2>
+    <p class="welcome">Welcome, {{ username }}!</p>
+
+    <ul>
+      <li (click)="activeTab = 'doctors'" [class.active]="activeTab === 'doctors'">
+        👨‍⚕️ View Doctors
+      </li>
+      <li (click)="activeTab = 'book'" [class.active]="activeTab === 'book'">
+        📅 Book Appointment
+      </li>
+      <li (click)="activeTab = 'appointments'" [class.active]="activeTab === 'appointments'">
+        📋 My Appointments
+      </li>
+      <li (click)="logout()">
+        🚪 Logout
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- View Doctors -->
+    <div *ngIf="activeTab === 'doctors'">
+      <h3>👨‍⚕️ Available Doctors</h3>
+      <div class="cards-grid">
+        <div class="card" *ngFor="let doctor of doctors">
+          <h4>{{ doctor.fullName }}</h4>
+          <p>🔬 {{ doctor.specialization }}</p>
+          <p>📞 {{ doctor.phone }}</p>
+          <button class="book-btn" (click)="selectDoctor(doctor)">
+            Book Appointment
+          </button>
+        </div>
+      </div>
+      <p *ngIf="doctors.length === 0">No doctors available.</p>
+    </div>
+
+    <!-- Book Appointment -->
+    <div *ngIf="activeTab === 'book'">
+      <h3>📅 Book Appointment</h3>
+      <div class="form-card">
+
+        <div class="form-group">
+          <label>Select Doctor</label>
+          <select [(ngModel)]="selectedDoctorId">
+            <option value="">-- Select Doctor --</option>
+            <option *ngFor="let doctor of doctors" [value]="doctor.id">
+              {{ doctor.fullName }} - {{ doctor.specialization }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Appointment Date</label>
+          <input type="datetime-local" [(ngModel)]="appointmentDate" />
+        </div>
+
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea
+            placeholder="Describe your symptoms..."
+            [(ngModel)]="notes"
+            rows="4">
+          </textarea>
+        </div>
+
+        <button class="submit-btn" (click)="bookAppointment()">
+          Book Appointment
+        </button>
+
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      </div>
+    </div>
+
+    <!-- My Appointments -->
+    <div *ngIf="activeTab === 'appointments'">
+      <h3>📋 My Appointments</h3>
+      <table *ngIf="appointments.length > 0">
+        <thead>
+          <tr>
+            <th>Doctor</th>
+            <th>Specialization</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let apt of appointments">
+            <td>{{ apt.doctor.fullName }}</td>
+            <td>{{ apt.doctor.specialization }}</td>
+            <td>{{ apt.appointmentDate | date: 'medium' }}</td>
+            <td>
+              <span [class]="'status ' + apt.status.toLowerCase()">
+                {{ apt.status }}
+              </span>
+            </td>
+            <td>{{ apt.notes }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="appointments.length === 0">No appointments found.</p>
+    </div>
+
+  </div>
+</div>

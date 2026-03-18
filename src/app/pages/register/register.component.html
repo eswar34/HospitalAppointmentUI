@@ -1,0 +1,109 @@
+<div class="register-container">
+  <div class="register-card">
+
+    <h2>🏥 Hospital Register</h2>
+    <p class="subtitle">Create your account</p>
+
+    <div class="form-group">
+      <label>Username</label>
+      <input
+        type="text"
+        placeholder="Enter your username"
+        [(ngModel)]="username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        placeholder="Enter your email"
+        [(ngModel)]="email"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        placeholder="Enter your password"
+        [(ngModel)]="password"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Role</label>
+      <select [(ngModel)]="role" (change)="onRoleChange()">
+        <option value="Patient">Patient</option>
+        <option value="Doctor">Doctor</option>
+      </select>
+    </div>
+
+    <!-- Patient Fields -->
+    <div *ngIf="role === 'Patient'">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input
+          type="text"
+          placeholder="Enter your full name"
+          [(ngModel)]="fullName"
+        />
+      </div>
+      <div class="form-group">
+        <label>Age</label>
+        <input
+          type="number"
+          placeholder="Enter your age"
+          [(ngModel)]="age"
+        />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input
+          type="text"
+          placeholder="Enter your phone"
+          [(ngModel)]="phone"
+        />
+      </div>
+    </div>
+
+    <!-- Doctor Fields -->
+    <div *ngIf="role === 'Doctor'">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input
+          type="text"
+          placeholder="Enter your full name"
+          [(ngModel)]="fullName"
+        />
+      </div>
+      <div class="form-group">
+        <label>Specialization</label>
+        <input
+          type="text"
+          placeholder="Enter your specialization"
+          [(ngModel)]="specialization"
+        />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input
+          type="text"
+          placeholder="Enter your phone"
+          [(ngModel)]="phone"
+        />
+      </div>
+    </div>
+
+    <button class="register-btn" (click)="register()">Register</button>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/login">Login here</a>
+    </p>
+
+  </div>
+</div>

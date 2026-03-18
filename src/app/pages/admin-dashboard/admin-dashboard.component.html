@@ -1,0 +1,167 @@
+<div class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🏥 Hospital</h2>
+    <p class="welcome">Welcome, Admin!</p>
+
+    <ul>
+      <li (click)="activeTab = 'doctors'" [class.active]="activeTab === 'doctors'">
+        👨‍⚕️ Doctors
+      </li>
+      <li (click)="activeTab = 'patients'" [class.active]="activeTab === 'patients'">
+        🧑‍🤝‍🧑 Patients
+      </li>
+      <li (click)="activeTab = 'appointments'" [class.active]="activeTab === 'appointments'">
+        📋 Appointments
+      </li>
+      <li (click)="logout()">
+        🚪 Logout
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Doctors Tab -->
+<div *ngIf="activeTab === 'doctors'">
+  <h3>👨‍⚕️ All Doctors</h3>
+
+  <!-- Add Doctor Form -->
+  <div class="form-card">
+    <h4>➕ Add New Doctor</h4>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" placeholder="Username" [(ngModel)]="newDoctor.username" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="Email" [(ngModel)]="newDoctor.email" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" placeholder="Password" [(ngModel)]="newDoctor.password" />
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Full Name" [(ngModel)]="newDoctor.fullName" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Specialization</label>
+        <input type="text" placeholder="Specialization" [(ngModel)]="newDoctor.specialization" />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" placeholder="Phone" [(ngModel)]="newDoctor.phone" />
+      </div>
+    </div>
+
+    <button class="add-btn" (click)="addDoctor()">➕ Add Doctor</button>
+
+    <p class="success" *ngIf="doctorSuccessMessage">{{ doctorSuccessMessage }}</p>
+    <p class="error" *ngIf="doctorErrorMessage">{{ doctorErrorMessage }}</p>
+  </div>
+
+  <!-- Doctors Table -->
+  <table *ngIf="doctors.length > 0">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Specialization</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doctor of doctors">
+        <td>{{ doctor.fullName }}</td>
+        <td>{{ doctor.specialization }}</td>
+        <td>{{ doctor.phone }}</td>
+        <td>{{ doctor.user?.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="doctors.length === 0">No doctors found.</p>
+</div>
+
+    <!-- Patients Tab -->
+    <div *ngIf="activeTab === 'patients'">
+      <h3>🧑‍🤝‍🧑 All Patients</h3>
+      <table *ngIf="patients.length > 0">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Age</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients">
+            <td>{{ patient.fullName }}</td>
+            <td>{{ patient.age }}</td>
+            <td>{{ patient.phone }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="patients.length === 0">No patients found.</p>
+    </div>
+
+    <!-- Appointments Tab -->
+    <div *ngIf="activeTab === 'appointments'">
+      <h3>📋 All Appointments</h3>
+      <table *ngIf="appointments.length > 0">
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let apt of appointments">
+            <td>{{ apt.patient.fullName }}</td>
+            <td>{{ apt.doctor.fullName }}</td>
+            <td>{{ apt.appointmentDate | date: 'medium' }}</td>
+            <td>
+              <span [class]="'status ' + apt.status.toLowerCase()">
+                {{ apt.status }}
+              </span>
+            </td>
+            <td>{{ apt.notes }}</td>
+            <td>
+              <button
+                class="confirm-btn"
+                *ngIf="apt.status === 'Pending'"
+                (click)="updateStatus(apt.id, 'Confirmed')">
+                ✅ Confirm
+              </button>
+              <button
+                class="cancel-btn"
+                *ngIf="apt.status === 'Pending'"
+                (click)="updateStatus(apt.id, 'Cancelled')">
+                ❌ Cancel
+              </button>
+              <span *ngIf="apt.status !== 'Pending'">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="appointments.length === 0">No appointments found.</p>
+      <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </div>
+
+  </div>
+</div>

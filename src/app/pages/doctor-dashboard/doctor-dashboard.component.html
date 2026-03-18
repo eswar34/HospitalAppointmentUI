@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🏥 Hospital</h2>
+    <p class="welcome">Welcome, Dr. {{ username }}!</p>
+
+    <ul>
+      <li (click)="activeTab = 'profile'" [class.active]="activeTab === 'profile'">
+        👨‍⚕️ My Profile
+      </li>
+      <li (click)="activeTab = 'appointments'" [class.active]="activeTab === 'appointments'">
+        📋 My Appointments
+      </li>
+      <li (click)="logout()">
+        🚪 Logout
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- My Profile -->
+    <div *ngIf="activeTab === 'profile'">
+      <h3>👨‍⚕️ My Profile</h3>
+      <div class="profile-card" *ngIf="profile">
+        <div class="profile-header">
+          <div class="avatar">👨‍⚕️</div>
+          <div>
+            <h4>{{ profile.fullName }}</h4>
+            <p class="specialization">{{ profile.specialization }}</p>
+          </div>
+        </div>
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="label">📞 Phone</span>
+            <span class="value">{{ profile.phone }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">📧 Email</span>
+            <span class="value">{{ profile.user?.email }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">🔬 Specialization</span>
+            <span class="value">{{ profile.specialization }}</span>
+          </div>
+        </div>
+      </div>
+      <p *ngIf="!profile">Loading profile...</p>
+    </div>
+
+    <!-- My Appointments -->
+    <div *ngIf="activeTab === 'appointments'">
+      <h3>📋 My Appointments</h3>
+      <table *ngIf="appointments.length > 0">
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let apt of appointments">
+            <td>{{ apt.patient.fullName }}</td>
+            <td>{{ apt.patient.phone }}</td>
+            <td>{{ apt.appointmentDate | date: 'medium' }}</td>
+            <td>
+              <span [class]="'status ' + apt.status.toLowerCase()">
+                {{ apt.status }}
+              </span>
+            </td>
+            <td>{{ apt.notes }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="appointments.length === 0">No appointments found.</p>
+    </div>
+
+  </div>
+</div>
